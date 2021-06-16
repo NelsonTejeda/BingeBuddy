@@ -32,64 +32,87 @@ class CreateAccountScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_outlined),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'username'
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: FlutterLogo(
+                    size: 300,
+                    style: FlutterLogoStyle.markOnly,
+                  ),
                 ),
-                controller: username,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'email'
+                TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'username'
+                  ),
+                  controller: username,
                 ),
-                controller: email,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'password'
+                Container(
+                  margin: EdgeInsets.only(top: 10,bottom: 10),
+                  child: TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'email'
+                    ),
+                    controller: email,
+                  ),
                 ),
-                controller: password,
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    FocusScope.of(context).unfocus();
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: email.text,
-                        password: password.text
-                    ).then((value) => addUser(FirebaseAuth.instance.currentUser.uid));
-                    //await addUser(FirebaseAuth.instance.currentUser.uid);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBarAccountMade);
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
-                      ScaffoldMessenger.of(context).showSnackBar(snackBarWeakPass);
-                      print('The password provided is too weak.');
-                    } else if (e.code == 'email-already-in-use') {
-                      ScaffoldMessenger.of(context).showSnackBar(snackBarAccountExist);
-                      print('The account already exists for that email.');
-                    }
-                    else if(password.text.length == 0){
-                      ScaffoldMessenger.of(context).showSnackBar(snackBarShortPass);
-                    }
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                child: Text("sign up!"),
-              )
-            ],
+                TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'password'
+                  ),
+                  controller: password,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width - 60,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        FocusScope.of(context).unfocus();
+                        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                            email: email.text,
+                            password: password.text
+                        ).then((value) => addUser(FirebaseAuth.instance.currentUser.uid));
+                        //await addUser(FirebaseAuth.instance.currentUser.uid);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBarAccountMade);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          ScaffoldMessenger.of(context).showSnackBar(snackBarWeakPass);
+                          print('The password provided is too weak.');
+                        } else if (e.code == 'email-already-in-use') {
+                          ScaffoldMessenger.of(context).showSnackBar(snackBarAccountExist);
+                          print('The account already exists for that email.');
+                        }
+                        else if(password.text.length == 0){
+                          ScaffoldMessenger.of(context).showSnackBar(snackBarShortPass);
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Text("sign up!"),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

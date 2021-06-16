@@ -100,21 +100,24 @@ class _InfoScreen extends State<InfoScreen>{
                       return Text(snapshot.error.toString());
                     }
                     else if(snapshot.hasData){
-                      return Expanded(
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context,index){
-                            return Padding(
-                              padding: EdgeInsets.all(15),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30.0),
-                                child: Image.network(
-                                  snapshot.data[index].logoPath,
-                                ) ,
-                              ),
-                            );
-                          },
+                      return Container(
+                        child: Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context,index){
+                              return Padding(
+                                padding: EdgeInsets.all(15),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    snapshot.data[index].logoPath,
+                                  ) ,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       );
                     }
